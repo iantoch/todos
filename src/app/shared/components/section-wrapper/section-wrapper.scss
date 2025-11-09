@@ -4,7 +4,7 @@
 }
 
 .section-wrapper {
-  background: #f3f4f6;
+  background: #b3bfd5;
   border-radius: 12px;
   border: 1px solid #d1d5db;
   padding: 1.5rem;
@@ -16,10 +16,8 @@
   background-position: -1px -1px;
   transition: all 0.2s ease;
   &:hover {
-    transform: translateY(-1px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
   }
-
   position: relative;
   &::before {
     content: '';
@@ -71,10 +69,6 @@
   font-weight: 500;
   margin: 0;
   color: #1f2937;
-  background: linear-gradient(135deg, #1f2937 0%, #4b5563 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
   letter-spacing: -0.5px;
 }
 
@@ -90,7 +84,7 @@
   gap: 0.5rem;
   padding: 0.25rem 0.6rem;
   border-radius: 8px;
-  background: transparent;
+  background: #f1f5f9;
   color: #334155;
   border: 1px solid transparent;
   transition: background-color 0.15s ease, box-shadow 0.15s ease;
@@ -105,22 +99,36 @@
   }
 
   &:hover {
-    background: #f1f5f9;
+    background: #3cb7dd;
     box-shadow: 0 2px 6px rgba(16, 24, 40, 0.04);
   }
 }
 
 @media (max-width: 480px) {
-  .title {
-    font-size: 1.5rem;
+  /* Mobile-first: stack header so title is full-width and actions move below */
+  .section-header {
+    flex-direction: column;
+    align-items: center; /* center both title and actions when stacked */
+    gap: 0.5rem;
   }
 
-  .add-button {
-    transform: scale(0.9);
+  .title {
+    font-size: 1.5rem;
+    width: 100%;
+    margin-bottom: 0;
+    text-align: center; /* center the title text */
+  }
 
-    &:hover {
-      transform: rotate(90deg) scale(1);
-    }
+  .header-actions {
+    width: auto; /* don't force full width on mobile */
+    display: flex;
+    justify-content: center; /* center actions under the title */
+    gap: 0.5rem;
+  }
+
+  .action-button {
+    flex: 0 0 auto;
+    padding: 0.45rem 0.8rem;
   }
 }
 

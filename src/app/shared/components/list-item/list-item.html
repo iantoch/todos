@@ -9,9 +9,15 @@
     <div class="title" [class.completed]="todo().completed">{{ todo().title }}</div>
     <div class="description" [class.completed]="todo().completed">{{ todo().description }}</div>
 
-    <div class="meta">
-      <mat-icon class="meta-icon">calendar_today</mat-icon>
-      <span class="meta-text">{{ displayDate }}</span>
+    <div class="meta" [class.completed]="todo().completed">
+      <div class="meta-date">
+        <mat-icon class="meta-icon">calendar_today</mat-icon>
+        <span class="meta-text">Created at: {{ todo().createdAt | date : 'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="meta-date">
+        <mat-icon class="meta-icon">calendar_today</mat-icon>
+        <span class="meta-text"> Due date: {{ todo().dueDate | date : 'dd/MM/yyyy' }}</span>
+      </div>
     </div>
   </div>
 
