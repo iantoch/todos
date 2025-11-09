@@ -33,12 +33,10 @@ export class ListItem {
 
   isDueDay(): boolean {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const due = this.todo().dueDate;
-    return (
-      due.getFullYear() === today.getFullYear() &&
-      due.getMonth() === today.getMonth() &&
-      due.getDate() === today.getDate()
-    );
+    due.setHours(0, 0, 0, 0);
+    return due.getTime() <= today.getTime();
   }
 
   get stateClass(): string {

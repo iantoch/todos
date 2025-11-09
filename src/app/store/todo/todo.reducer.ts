@@ -12,7 +12,7 @@ export interface TodoState extends EntityState<Todo> {
 
 export const adapter: EntityAdapter<Todo> = createEntityAdapter<Todo>({
   selectId: (t: Todo) => t.id,
-  sortComparer: (a: Todo, b: Todo) => a.createdAt.getTime() - b.createdAt.getTime(),
+  sortComparer: (a: Todo, b: Todo) => b.createdAt.getTime() - a.createdAt.getTime(),
 });
 
 export const initialState: TodoState = adapter.getInitialState({
@@ -52,18 +52,17 @@ export const todoReducer = createReducer(
   on(TodoActions.deleteTodoFailure, (state, { error }) => ({ ...state, loading: false, error })),
 
   // Partial update: status + dueDate
-  on(TodoActions.updateTodoStatusAndDueDate, (state) => ({ ...state, loading: true })),
-  on(TodoActions.updateTodoStatusAndDueDateSuccess, (state, { id, changes }) =>
+  on(TodoActions.updateTodoStatus, (state) => ({ ...state, loading: true })),
+  on(TodoActions.updateTodoStatusSuccess, (state, { id, changes }) =>
     adapter.updateOne({ id, changes }, { ...state, loading: false })
   ),
-  on(TodoActions.updateTodoStatusAndDueDateFailure, (state, { error }) => ({
+  on(TodoActions.updateTodoStatusFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,
   }))
 );
 
-// Adapter selectors
 export const { selectAll, selectEntities, selectIds, selectTotal } = adapter.getSelectors();
 
 export default todoReducer;

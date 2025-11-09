@@ -59,13 +59,13 @@ export class TodoEffects {
     )
   );
 
-  updateStatusAndDueDate$ = createEffect(() =>
+  updateStatus$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(TodoActions.updateTodoStatusAndDueDate),
+      ofType(TodoActions.updateTodoStatus),
       mergeMap(({ id, changes }) =>
-        this.todoService.updateStatusAndDueDate(id, changes).pipe(
-          map(() => TodoActions.updateTodoStatusAndDueDateSuccess({ id, changes })),
-          catchError((error) => of(TodoActions.updateTodoStatusAndDueDateFailure({ error })))
+        this.todoService.updateStatus(id, changes).pipe(
+          map(() => TodoActions.updateTodoStatusSuccess({ id, changes })),
+          catchError((error) => of(TodoActions.updateTodoStatusFailure({ error })))
         )
       )
     )

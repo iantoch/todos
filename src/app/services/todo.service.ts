@@ -1,131 +1,98 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Injectable, WritableSignal, computed, signal } from '@angular/core';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Todo } from '../store/todo/todo.model';
+import { TODO_MOCK } from '../mock/todos.mock';
 
 const STORAGE_KEY = 'todos';
 
-function parseTodo(raw: any): Todo {
+function deserialize(raw: any): Todo {
   return {
     ...raw,
-    createdAt: raw.createdAt ? new Date(raw.createdAt) : new Date(),
-    dueDate: raw.dueDate ? new Date(raw.dueDate) : null,
+    createdAt: raw?.createdAt ? new Date(raw.createdAt) : new Date(),
+    dueDate: raw?.dueDate ? new Date(raw.dueDate) : null,
+  };
+}
+
+function serialize(todo: Todo) {
+  return {
+    ...todo,
+    createdAt: todo.createdAt instanceof Date ? todo.createdAt.toISOString() : todo.createdAt,
+    dueDate: todo.dueDate instanceof Date ? todo.dueDate.toISOString() : todo.dueDate,
   };
 }
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
-  private readAll(): Todo[] {
+  private todosSignal: WritableSignal<Todo[]> = signal<Todo[]>(this.readInitial());
+
+  private _todos$ = new BehaviorSubject<Todo[]>(this.todosSignal());
+  readonly todos$ = this._todos$.asObservable();
+
+  readonly todos = computed(() => this.todosSignal());
+
+  private readInitial(): Todo[] {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) {
-        const now = Date.now();
-        const today = new Date();
-        const seed: Todo[] = [
-          {
-            id: 'seed-1',
-            title: 'Buy groceries',
-            description:
-              'Milk, eggs, bread, and fresh fruit. Also pick up some snacks for the weekend.',
-            completed: false,
-            createdAt: new Date(now - 5 * 24 * 60 * 60 * 1000),
-            dueDate: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
-          },
-          {
-            id: 'seed-2',
-            title: 'Call Alice about project',
-            description: 'Discuss milestones, blockers, and next steps over a quick call.',
-            completed: true,
-            createdAt: new Date(now - 10 * 24 * 60 * 60 * 1000),
-            dueDate: new Date(now - 9 * 24 * 60 * 60 * 1000),
-          },
-          {
-            id: 'seed-3',
-            title: 'Write blog post',
-            description:
-              'Draft a short article about building accessible Angular components. This description is intentionally long to demonstrate wrapping and truncation behavior in the list item component.',
-            completed: false,
-            createdAt: new Date(now - 2 * 24 * 60 * 60 * 1000),
-            dueDate: new Date(now + 7 * 24 * 60 * 60 * 1000),
-          },
-          {
-            id: 'seed-4',
-            title: 'Car service',
-            description:
-              'Take the car for its scheduled maintenance. Check tire pressure and oil level.',
-            completed: false,
-            createdAt: new Date(now - 20 * 24 * 60 * 60 * 1000),
-            dueDate: new Date(now - 1 * 24 * 60 * 60 * 1000),
-          },
-          {
-            id: 'seed-5',
-            title: 'Read book',
-            description: 'Finish reading the last two chapters of the book.',
-            completed: true,
-            createdAt: new Date(now - 30 * 24 * 60 * 60 * 1000),
-            dueDate: new Date(now - 25 * 24 * 60 * 60 * 1000),
-          },
-        ];
-        this.writeAll(seed);
+      const localTodos = localStorage.getItem(STORAGE_KEY);
+      if (!localTodos) {
+        const seed = TODO_MOCK.map(deserialize);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(seed.map(serialize)));
         return seed;
       }
-      const parsed = JSON.parse(raw) as any[];
-      return parsed.map(parseTodo);
-    } catch (e) {
-      console.error('Failed to read todos from localStorage', e);
+      const parsed = JSON.parse(localTodos) as any[];
+      return parsed.map(deserialize);
+    } catch (error) {
+      console.error('TodoService: failed to read from localStorage', error);
       return [];
     }
   }
 
-  private writeAll(todos: Todo[]) {
+  private persist(list: Todo[]) {
     try {
-      const serializable = todos.map((t) => ({
-        ...t,
-        createdAt: t.createdAt.toISOString(),
-        dueDate: t.dueDate ? t.dueDate.toISOString() : null,
-      }));
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(serializable));
-    } catch (e) {
-      console.error('Failed to write todos to localStorage', e);
+      const serialized = list.map(serialize);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(serialized));
+    } catch (error) {
+      console.error('TodoService: failed to persist todos', error);
     }
   }
 
   getAll(): Observable<Todo[]> {
-    return of(this.readAll());
+    return of(this.todosSignal());
   }
 
   add(todo: Todo): Observable<Todo> {
-    const all = this.readAll();
-    all.push(todo);
-    this.writeAll(all);
+    const next = [...this.todosSignal(), todo];
+    this.todosSignal.set(next);
+    this.persist(next);
     return of(todo);
   }
 
   update(todo: Todo): Observable<Todo> {
-    const all = this.readAll();
-    const idx = all.findIndex((t) => t.id === todo.id);
+    const list = this.todosSignal();
+    const idx = list.findIndex((t) => t.id === todo.id);
     if (idx >= 0) {
-      all[idx] = todo;
-      this.writeAll(all);
+      const next = [...list];
+      next[idx] = todo;
+      this.todosSignal.set(next);
+      this.persist(next);
     }
     return of(todo);
   }
 
   delete(id: string): Observable<void> {
-    const all = this.readAll();
-    const filtered = all.filter((t) => t.id !== id);
-    this.writeAll(filtered);
+    const next = this.todosSignal().filter((t) => t.id !== id);
+    this.todosSignal.set(next);
+    this.persist(next);
     return of(void 0);
   }
 
-  updateStatusAndDueDate(
-    id: string,
-    changes: { completed: boolean; dueDate: Date | null }
-  ): Observable<void> {
-    const all = this.readAll();
-    const idx = all.findIndex((t) => t.id === id);
+  updateStatus(id: string, changes: { completed: boolean }): Observable<void> {
+    const list = this.todosSignal();
+    const idx = list.findIndex((t) => t.id === id);
     if (idx >= 0) {
-      all[idx] = { ...all[idx], ...changes } as Todo;
-      this.writeAll(all);
+      const next = [...list];
+      next[idx] = { ...next[idx], ...changes } as Todo;
+      this.todosSignal.set(next);
+      this.persist(next);
     }
     return of(void 0);
   }

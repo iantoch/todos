@@ -39,16 +39,16 @@ export const deleteTodoFailure = createAction(
   props<{ error: unknown }>()
 );
 
-// Partial update: only status and dueDate
-export const updateTodoStatusAndDueDate = createAction(
-  '[Todo] Update Todo Status And DueDate',
-  props<{ id: string; changes: { completed: boolean; dueDate: Date } }>()
+// Partial update: only status
+export const updateTodoStatus = createAction(
+  '[Todo] Update Todo Status',
+  props<{ id: string; changes: { completed: boolean } }>()
 );
-export const updateTodoStatusAndDueDateSuccess = createAction(
-  '[Todo] Update Todo Status And DueDate Success',
-  props<{ id: string; changes: { completed: boolean; dueDate: Date } }>()
+export const updateTodoStatusSuccess = createAction(
+  '[Todo] Update Todo Status Success',
+  props<{ id: string; changes: { completed: boolean } }>()
 );
-export const updateTodoStatusAndDueDateFailure = createAction(
-  '[Todo] Update Todo Status And DueDate Failure',
+export const updateTodoStatusFailure = createAction(
+  '[Todo] Update Todo Status Failure',
   props<{ error: unknown }>()
 );

@@ -39,13 +39,12 @@ export class TodoList implements OnInit {
   }
 
   onToggle(event: { id: string; completed: boolean }) {
-    // Find the full todo from store and dispatch a full update with new completed flag so we don't accidentally wipe dueDate.
     this.store
       .select(selectTodoById(event.id))
       .pipe(take(1))
-      .subscribe((t) => {
-        if (!t) return;
-        const updated = { ...t, completed: event.completed };
+      .subscribe((todo) => {
+        if (!todo) return;
+        const updated = { ...todo, completed: event.completed };
         this.store.dispatch(TodoActions.updateTodo({ todo: updated }));
       });
   }

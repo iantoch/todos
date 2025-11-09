@@ -1,59 +1,71 @@
-# Todos
+# Todos (Angular standalone + NgRx)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.9.
+A small Todo demonstration app built with Angular 20, standalone components and NgRx for state management. It uses modern Angular primitives (signals in service layer), Angular Material for UI, and persists data to localStorage for a simple, zero-backend experience.
 
-## Development server
+## Quick start
 
-To start a local development server, run:
+Requirements
 
-```bash
-ng serve
+- Node.js (recommended: Node 18 LTS or Node 20 LTS).
+- npm (bundled with Node) or your preferred package manager.
+
+Install and run:
+
+```powershell
+npm install
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open the app at: http://localhost:4200
 
-## Code scaffolding
+Run tests:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```powershell
+npm test
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Build for production:
 
-```bash
-ng generate --help
+```powershell
+npm run build
 ```
 
-## Building
+## Project structure (high level)
 
-To build the project run:
+- `src/app/features` – feature screens (todo list, todo form)
+- `src/app/shared/components` – reusable standalone UI components (section wrapper, list item)
+- `src/app/store` – NgRx store effects, actions and models
+- `src/app/services` – application services (e.g., `TodoService`)
+- `src/styles.scss` – global styles
 
-```bash
-ng build
-```
+The app uses standalone components and dynamic route loading (loadComponent) where applicable.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Local persistence
 
-## Running unit tests
+Todos are persisted to `localStorage` under the key `todos`. This provides a simple offline-friendly experience while you experiment with the UI and state management. To reset the app data in your browser, open DevTools → Application → Local Storage and remove the `todos` key.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Important versions
 
-```bash
-ng test
-```
+- Angular core packages: ^20.3.0
+- Angular CLI / build: ^20.3.9
+- Angular Material: ^20.2.12
+- Angular CDK: ^20.2.12
+- NgRx (store/effects/entity): ^20.1.0
+- rxjs: ~7.8.0
+- TypeScript (dev): ~5.9.2
 
-## Running end-to-end tests
+Recommended Node.js
 
-For end-to-end (e2e) testing, run:
+- Node 18 LTS (18.16.x or newer) or Node 20 LTS. Angular 20 works well with both Node 18 and Node 20. If you run into native build issues, try Node 18.x.
 
-```bash
-ng e2e
-```
+## Notable implementation details
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+- `TodoService` uses Angular Signals (internal WritableSignal) as the source of truth and exposes a `BehaviorSubject`-backed `todos$` Observable for compatibility with existing template code using `async`.
+- The app uses Angular Material components for form controls and buttons.
+- UI components are designed mobile-first and include responsive styles for small viewports.
 
-## Additional Resources
+## Scripts
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- `npm start` — run the dev server (ng serve)
+- `npm test` — run unit tests
+- `npm run build` — production build
