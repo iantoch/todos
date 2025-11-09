@@ -14,7 +14,7 @@
         <mat-icon class="meta-icon">calendar_today</mat-icon>
         <span class="meta-text">Created at: {{ todo().createdAt | date : 'dd/MM/yyyy' }}</span>
       </div>
-      <div class="meta-date">
+      <div class="meta-date" [class.due-date]="!todo().completed && isDueDay()">
         <mat-icon class="meta-icon">calendar_today</mat-icon>
         <span class="meta-text"> Due date: {{ todo().dueDate | date : 'dd/MM/yyyy' }}</span>
       </div>

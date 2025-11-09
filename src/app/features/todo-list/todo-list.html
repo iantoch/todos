@@ -1,22 +1,19 @@
-<app-section-wrapper
-  title="Simple ToDo app"
-  [buttonType]="'add'"
-  (onClick)="handleRedirectToCreate()"
->
-  <div *ngIf="todos$ | async as todos">
-    <div *ngIf="todos.length; else empty">
-      <ul class="todo-list">
-        <app-list-item
-          *ngFor="let t of todos"
-          [todo]="t"
-          (edit)="edit($event)"
-          (delete)="delete($event)"
-          (toggle)="onToggle($event)"
-        ></app-list-item>
-      </ul>
-    </div>
-    <ng-template #empty>
-      <p>No todos yet</p>
-    </ng-template>
+<app-section-wrapper title="Simple ToDo app" buttonType="add" (onClick)="handleRedirectToCreate()">
+  @if (todos$ | async; as todos) { @if (todos.length) {
+  <ul class="todo-list">
+    @for (todo of todos; track todo.id) {
+    <app-list-item
+      [todo]="todo"
+      (edit)="edit($event)"
+      (delete)="delete($event)"
+      (toggle)="onToggle($event)"
+    ></app-list-item>
+    }
+  </ul>
+  } @else {
+  <div class="empty-state">
+    <div class="empty-icon"></div>
+    <p>No todos yet. Click the + button to create one!</p>
   </div>
+  } }
 </app-section-wrapper>

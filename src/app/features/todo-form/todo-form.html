@@ -4,17 +4,17 @@
   (onClick)="handleRedirectBack()"
 >
   <form [formGroup]="todoForm" (ngSubmit)="onSubmit()" class="todo-form">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" floatLabel="always">
       <mat-label>Title</mat-label>
       <input matInput placeholder="Enter todo title" formControlName="title" />
-      @if(todoForm.get('title')?.errors?.['required'] && todoForm.get('title')?.touched) {
+      @if(titleControl?.errors?.['required'] && titleControl?.touched) {
       <mat-error>Title is required</mat-error>
-      } @if(todoForm.get('title')?.errors?.['minlength']) {
+      } @if(titleControl?.errors?.['minlength']) {
       <mat-error>Title must be at least 3 characters</mat-error>
       }
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" floatLabel="always">
       <mat-label>Description</mat-label>
       <textarea
         matInput
@@ -22,19 +22,21 @@
         formControlName="description"
         rows="3"
       ></textarea>
-      @if(todoForm.get('description')?.errors?.['required'] && todoForm.get('description')?.touched)
-      {
+      @if(descriptionControl?.errors?.['required'] && descriptionControl?.touched) {
       <mat-error>Description is required</mat-error>
-      } @if(todoForm.get('description')?.errors?.['minlength']) {
+      } @if(descriptionControl?.errors?.['minlength']) {
       <mat-error>Description must be at least 10 characters</mat-error>
       }
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" floatLabel="always">
       <mat-label>Due Date</mat-label>
       <input matInput [matDatepicker]="picker" [min]="minDate" formControlName="dueDate" />
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
+      @if(dueDateControl?.errors?.['required'] && dueDateControl?.touched) {
+      <mat-error>Due date is required</mat-error>
+      }
     </mat-form-field>
 
     <div class="form-actions">

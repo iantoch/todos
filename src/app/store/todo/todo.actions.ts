@@ -42,11 +42,11 @@ export const deleteTodoFailure = createAction(
 // Partial update: only status and dueDate
 export const updateTodoStatusAndDueDate = createAction(
   '[Todo] Update Todo Status And DueDate',
-  props<{ id: string; changes: { completed: boolean; dueDate: Date | null } }>()
+  props<{ id: string; changes: { completed: boolean; dueDate: Date } }>()
 );
 export const updateTodoStatusAndDueDateSuccess = createAction(
   '[Todo] Update Todo Status And DueDate Success',
-  props<{ id: string; changes: { completed: boolean; dueDate: Date | null } }>()
+  props<{ id: string; changes: { completed: boolean; dueDate: Date } }>()
 );
 export const updateTodoStatusAndDueDateFailure = createAction(
   '[Todo] Update Todo Status And DueDate Failure',

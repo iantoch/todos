@@ -4,7 +4,7 @@ export interface Todo {
   description: string;
   completed: boolean;
   createdAt: Date;
-  dueDate: Date | null;
+  dueDate: Date;
 }
 
 export type PartialTodoUpdate = Partial<

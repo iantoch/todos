@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Todo } from '../store/todo/todo.model';
 
-const STORAGE_KEY = 'todos_app_v1';
+const STORAGE_KEY = 'todos';
 
 function parseTodo(raw: any): Todo {
   return {
@@ -14,8 +14,6 @@ function parseTodo(raw: any): Todo {
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
-  constructor() {}
-
   private readAll(): Todo[] {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);

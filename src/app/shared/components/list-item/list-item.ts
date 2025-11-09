@@ -31,20 +31,19 @@ export class ListItem {
     this.toggle.emit({ id: this.todo().id, completed: checked });
   }
 
+  isDueDay(): boolean {
+    const today = new Date();
+    const due = this.todo().dueDate;
+    return (
+      due.getFullYear() === today.getFullYear() &&
+      due.getMonth() === today.getMonth() &&
+      due.getDate() === today.getDate()
+    );
+  }
+
   get stateClass(): string {
     if (this.todo().completed) return 'state-completed';
-    const today = new Date();
-    const dueDateVal = this.todo().dueDate;
-    const due = dueDateVal ? new Date(dueDateVal as string | number | Date) : null;
-    if (due) {
-      if (
-        due.getFullYear() === today.getFullYear() &&
-        due.getMonth() === today.getMonth() &&
-        due.getDate() === today.getDate()
-      ) {
-        return 'state-due-today';
-      }
-    }
+    if (this.isDueDay()) return 'state-due-today';
     return 'state-upcoming';
   }
 }
