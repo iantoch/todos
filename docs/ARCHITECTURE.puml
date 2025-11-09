@@ -1,0 +1,50 @@
+@startuml
+title Todos App - Architecture
+skinparam componentStyle rectangle
+
+package "UI (Standalone Components)" {
+  component TodoList
+  component TodoForm
+  component ListItem
+  component SectionWrapper
+}
+
+package Services {
+  component TodoService
+  component TodoFormService
+}
+
+package "State (NgRx)" {
+  component Store
+  component "Actions / Selectors" as NS
+  component "Reducer / Entities" as Reducer
+}
+
+database localStorage as LS
+
+TodoList --> Store : selectAllTodos / todos$
+TodoList --> ListItem : renders items
+TodoForm --> TodoFormService : buildForm / patchForm
+TodoForm --> Store : dispatch addTodo / updateTodo
+ListItem --> Store : dispatch updateTodoStatus / deleteTodo
+TodoService --> LS : persist / load
+Store ..> TodoService : seed / load (via resolver)
+
+component TodoResolver
+TodoResolver --> Store : dispatch loadTodos
+TodoResolver --> Store : selectTodoById(id)
+Store --> TodoList : emits todos$
+Store --> TodoForm : resolver supplies todo
+
+note right of TodoService
+  Implementation uses Angular Signals as
+  the in-memory source of truth and
+  persists to localStorage (JSON ISO dates).
+end note
+
+note left of Store
+  NgRx entity adapter manages Todos
+  selectors: selectAllTodos, selectTodoById
+end note
+
+@enduml
