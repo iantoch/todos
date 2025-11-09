@@ -1,16 +1,16 @@
 <app-section-wrapper
-  [title]="'Create New Todo'"
-  [buttonType]="'back'"
+  [title]="editMode() ? 'Edit Todo' : 'Create New Todo'"
+  buttonType="back"
   (onClick)="handleRedirectBack()"
 >
   <form [formGroup]="todoForm" (ngSubmit)="onSubmit()" class="todo-form">
     <mat-form-field appearance="outline">
       <mat-label>Title</mat-label>
       <input matInput placeholder="Enter todo title" formControlName="title" />
-      @if(todoForm.get('title')?.errors?.['required']){
-      <mat-error> Title is required </mat-error>
-      } @if(todoForm.get('title')?.errors?.['minlength']){
-      <mat-error> Title must be at least 3 characters </mat-error>
+      @if(todoForm.get('title')?.errors?.['required'] && todoForm.get('title')?.touched) {
+      <mat-error>Title is required</mat-error>
+      } @if(todoForm.get('title')?.errors?.['minlength']) {
+      <mat-error>Title must be at least 3 characters</mat-error>
       }
     </mat-form-field>
 
@@ -22,10 +22,11 @@
         formControlName="description"
         rows="3"
       ></textarea>
-      @if(todoForm.get('description')?.errors?.['required']){
-      <mat-error> Description is required </mat-error>
-      } @if(todoForm.get('description')?.errors?.['minlength']){
-      <mat-error> Description must be at least 10 characters </mat-error>
+      @if(todoForm.get('description')?.errors?.['required'] && todoForm.get('description')?.touched)
+      {
+      <mat-error>Description is required</mat-error>
+      } @if(todoForm.get('description')?.errors?.['minlength']) {
+      <mat-error>Description must be at least 10 characters</mat-error>
       }
     </mat-form-field>
 
@@ -37,13 +38,19 @@
     </mat-form-field>
 
     <div class="form-actions">
-      <button mat-flat-button color="primary" type="submit" [disabled]="!todoForm.valid">
-        <mat-icon>add_task</mat-icon>
-        Create Todo
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="!todoForm.valid || (editMode() && !todoForm.dirty)"
+      >
+        <mat-icon>{{ editMode() ? 'save' : 'add_task' }}</mat-icon>
+        <span>{{ editMode() ? 'Update Todo' : 'Create Todo' }}</span>
       </button>
-      <button mat-stroked-button type="button" (click)="todoForm.reset()">
+
+      <button mat-flat-button color="warn" type="button" (click)="handleRedirectBack()">
         <mat-icon>clear</mat-icon>
-        Clear
+        <span>Cancel</span>
       </button>
     </div>
   </form>

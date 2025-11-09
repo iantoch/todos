@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { TodoResolver } from './features/todo-form/todo-form.resolver';
 
 export const routes: Routes = [
   {
@@ -16,6 +17,9 @@ export const routes: Routes = [
   },
   {
     path: 'todos/edit/:id',
+    resolve: {
+      todo: TodoResolver,
+    },
     loadComponent: () => import('./features/todo-form/todo-form').then((m) => m.TodoForm),
   },
 ];
