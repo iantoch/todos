@@ -1,0 +1,8 @@
+<section class="section-wrapper">
+  @if(title) {
+  <app-section-header [title]="title" (addClick)="onAdd()"></app-section-header>
+  }
+  <div class="section-content">
+    <ng-content></ng-content>
+  </div>
+</section>

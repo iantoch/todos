@@ -1,0 +1,26 @@
+<div class="list-item" [ngClass]="stateClass">
+  <mat-checkbox
+    class="item-checkbox"
+    [checked]="todo().completed"
+    (change)="onToggle($event.checked)"
+  ></mat-checkbox>
+
+  <div class="content">
+    <div class="title" [class.completed]="todo().completed">{{ todo().title }}</div>
+    <div class="description" [class.completed]="todo().completed">{{ todo().description }}</div>
+
+    <div class="meta">
+      <mat-icon class="meta-icon">calendar_today</mat-icon>
+      <span class="meta-text">{{ displayDate }}</span>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button type="button" mat-icon-button aria-label="Edit task" (click)="onEdit()">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button type="button" mat-icon-button aria-label="Delete task" (click)="onDelete()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</div>

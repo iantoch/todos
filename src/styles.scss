@@ -1,1 +1,34 @@
-/* You can add global styles to this file, and also import other style files */
+html {
+  body {
+    color-scheme: light;
+    --app-accent: #6b7280;
+    --app-accent-2: #4b5563;
+    background-color: #ffffff;
+    background-image: linear-gradient(#e5e7eb 1px, transparent 1px),
+      linear-gradient(to right, #e5e7eb 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #1f2937;
+    font: var(--mat-sys-body-medium, 16px/1.4 Roboto, 'Helvetica Neue', sans-serif);
+    margin: 0;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+  }
+
+  :root {
+    --app-gradient: linear-gradient(
+      180deg,
+      rgba(107, 114, 128, 0.08) 0%,
+      rgba(75, 85, 99, 0.05) 100%
+    );
+    --app-glow: 0 4px 20px rgba(107, 114, 128, 0.1);
+    --paper-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --content-bg: rgba(255, 255, 255, 0.9);
+  }
+}

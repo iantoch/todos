@@ -1,0 +1,33 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #ffffff;
+  background-image: linear-gradient(#e5e7eb 1px, transparent 1px),
+    linear-gradient(to right, #e5e7eb 1px, transparent 1px);
+  background-size: 20px 20px;
+  color: #1f2937;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 150px;
+    background: linear-gradient(
+      0deg,
+      rgba(229, 231, 235, 0.8) 0%,
+      rgba(229, 231, 235, 0.2) 50%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+}

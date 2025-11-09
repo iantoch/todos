@@ -1,0 +1,18 @@
+<app-section-wrapper title="Todo List" showAdd (addClick)="handleRedirectToCreate()">
+  <div *ngIf="todos$ | async as todos">
+    <div *ngIf="todos.length; else empty">
+      <ul class="todo-list">
+        <app-list-item
+          *ngFor="let t of todos"
+          [todo]="t"
+          (edit)="edit($event)"
+          (delete)="delete($event)"
+          (toggle)="onToggle($event)"
+        ></app-list-item>
+      </ul>
+    </div>
+    <ng-template #empty>
+      <p>No todos yet</p>
+    </ng-template>
+  </div>
+</app-section-wrapper>

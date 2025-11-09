@@ -1,0 +1,46 @@
+<app-section-wrapper [title]="'Create New Todo'" showBack>
+  <form [formGroup]="todoForm" (ngSubmit)="onSubmit()" class="todo-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Title</mat-label>
+      <input matInput placeholder="Enter todo title" formControlName="title" />
+      @if(todoForm.get('title')?.errors?.['required']){
+      <mat-error> Title is required </mat-error>
+      } @if(todoForm.get('title')?.errors?.['minlength']){
+      <mat-error> Title must be at least 3 characters </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        placeholder="Enter todo description"
+        formControlName="description"
+        rows="3"
+      ></textarea>
+      @if(todoForm.get('description')?.errors?.['required']){
+      <mat-error> Description is required </mat-error>
+      } @if(todoForm.get('description')?.errors?.['minlength']){
+      <mat-error> Description must be at least 10 characters </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Due Date</mat-label>
+      <input matInput [matDatepicker]="picker" [min]="minDate" formControlName="dueDate" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button mat-flat-button color="primary" type="submit" [disabled]="!todoForm.valid">
+        <mat-icon>add_task</mat-icon>
+        Create Todo
+      </button>
+      <button mat-stroked-button type="button" (click)="todoForm.reset()">
+        <mat-icon>clear</mat-icon>
+        Clear
+      </button>
+    </div>
+  </form>
+</app-section-wrapper>
