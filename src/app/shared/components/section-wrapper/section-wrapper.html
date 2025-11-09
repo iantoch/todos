@@ -1,8 +1,33 @@
 <section class="section-wrapper">
-  @if(title) {
-  <app-section-header [title]="title" (addClick)="onAdd()"></app-section-header>
-  }
   <div class="section-content">
-    <ng-content></ng-content>
+    <header class="section-header">
+      <h1 class="title">{{ title() }}</h1>
+
+      <div class="header-actions">
+        @if(buttonType()){ @switch (buttonType()) { @case ('add') {
+        <button
+          mat-button
+          color="primary"
+          class="action-button"
+          (click)="handleClick()"
+          aria-label="Add new item"
+        >
+          <mat-icon>add</mat-icon>
+          <span class="btn-text">Create ToDo</span>
+        </button>
+        } @case ('back') {
+        <button
+          mat-button
+          class="action-button"
+          (click)="handleClick()"
+          aria-label="Go back to list"
+        >
+          <mat-icon>arrow_back</mat-icon>
+          <span class="btn-text">Go back</span>
+        </button>
+        } } }
+      </div>
+    </header>
   </div>
+  <ng-content></ng-content>
 </section>

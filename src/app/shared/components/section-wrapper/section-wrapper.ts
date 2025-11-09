@@ -1,20 +1,21 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SectionHeader } from '../section-header/section-header';
-import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-section-wrapper',
-  imports: [CommonModule, SectionHeader],
+  imports: [CommonModule, MatButtonModule, MatIconModule],
   templateUrl: './section-wrapper.html',
   styleUrl: './section-wrapper.scss',
 })
 export class SectionWrapper {
-  @Input() title?: string;
+  title = input<string>('Simple ToDo app');
+  buttonType = input<'add' | 'back' | null>(null);
 
-  constructor(private router: Router) {}
+  onClick = output<void>();
 
-  onAdd(): void {
-    this.router.navigate(['/todos/create']);
+  handleClick(): void {
+    this.onClick.emit();
   }
 }

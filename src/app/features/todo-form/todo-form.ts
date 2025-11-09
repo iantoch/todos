@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,6 +11,7 @@ import { SectionWrapper } from '../../shared/components/section-wrapper/section-
 import { Store } from '@ngrx/store';
 import { Todo } from '../../store/todo/todo.model';
 import * as TodoActions from '../../store/todo/todo.actions';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-todo-form',
@@ -29,6 +30,7 @@ import * as TodoActions from '../../store/todo/todo.actions';
   styleUrl: './todo-form.scss',
 })
 export class TodoForm {
+  router = inject(Router);
   todoForm: FormGroup;
   minDate = new Date();
 
@@ -53,5 +55,9 @@ export class TodoForm {
       this.store.dispatch(TodoActions.addTodo({ todo: newTodo }));
       this.todoForm.reset();
     }
+  }
+
+  handleRedirectBack(): void {
+    this.router.navigate(['./']);
   }
 }

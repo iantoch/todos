@@ -1,4 +1,8 @@
-<app-section-wrapper [title]="'Create New Todo'" showBack>
+<app-section-wrapper
+  [title]="'Create New Todo'"
+  [buttonType]="'back'"
+  (onClick)="handleRedirectBack()"
+>
   <form [formGroup]="todoForm" (ngSubmit)="onSubmit()" class="todo-form">
     <mat-form-field appearance="outline">
       <mat-label>Title</mat-label>

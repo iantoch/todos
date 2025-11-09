@@ -1,4 +1,8 @@
-<app-section-wrapper title="Todo List" showAdd (addClick)="handleRedirectToCreate()">
+<app-section-wrapper
+  title="Simple ToDo app"
+  [buttonType]="'add'"
+  (onClick)="handleRedirectToCreate()"
+>
   <div *ngIf="todos$ | async as todos">
     <div *ngIf="todos.length; else empty">
       <ul class="todo-list">
