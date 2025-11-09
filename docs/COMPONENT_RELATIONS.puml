@@ -1,0 +1,24 @@
+@startuml
+title Todos App ‑ Component Diagram
+
+skinparam componentStyle rectangle
+
+component "TodoListComponent" as TodoList
+component "TodoFormComponent" as TodoForm
+component "SectionWrapperComponent" as SectionWrapper
+component "TodoItemComponent" as TodoItem
+component "TodoService" as TodoService
+component "Store (NgRx)" as Store
+
+TodoList --> SectionWrapper : uses
+TodoForm --> SectionWrapper : uses
+
+TodoList --> TodoItem : renders many
+TodoList --> TodoService : interacts with
+TodoForm --> TodoService : interacts with
+TodoService --> Store : reads/writes
+TodoForm --> TodoList : navigates on save/edit/cancel
+SectionWrapper --> TodoForm : navigate from list context
+SectionWrapper --> TodoList : navigate from form context
+
+@enduml

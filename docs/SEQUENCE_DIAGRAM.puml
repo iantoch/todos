@@ -1,0 +1,46 @@
+@startuml
+title Todos App — Full Interaction Flow
+
+actor User
+
+participant "TodoListComponent" as TodoList
+participant "SectionWrapperComponent" as SectionWrapperList
+participant "TodoItemComponent" as TodoItem
+participant "TodoFormComponent" as TodoForm
+participant "SectionWrapperComponent" as SectionWrapperForm
+participant "TodoService" as TodoService
+participant "Store (NgRx)" as Store
+
+== Viewing Todo List ==
+User -> TodoList : open page
+TodoList -> TodoService : request todos
+TodoService -> Store : get todos state
+Store --> TodoService : todos list
+TodoService --> TodoList : deliver todos
+TodoList -> TodoItem : render each todo
+
+== Navigating to Add/Edit Todo ==
+User -> SectionWrapperList : click "Add/Edit Todo"
+SectionWrapperList -> TodoForm : navigate to TodoForm
+
+== Interacting with TodoForm ==
+User -> TodoForm : fill/edit form
+User -> SectionWrapperForm : interact (e.g., cancel)
+SectionWrapperForm -> TodoList : navigate back to TodoList
+
+== Saving or Updating Todo ==
+User -> TodoForm : click save/update
+TodoForm -> TodoService : save/update todo
+TodoService -> Store : dispatch add/update action
+Store --> TodoService : updated state
+TodoService --> TodoForm : return result
+TodoForm -> TodoList : navigate back to list
+
+== Refreshing Todo List ==
+TodoList -> TodoService : reload todos (optional)
+TodoService -> Store : get updated todos
+Store --> TodoService : todos list
+TodoService --> TodoList : deliver updated todos
+TodoList -> TodoItem : render updated todos
+
+@enduml
