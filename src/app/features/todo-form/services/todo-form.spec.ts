@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TodoForm } from './todo-form';
+import { TodoForm } from '../todo-form';
 
 describe('TodoForm', () => {
   let service: TodoForm;

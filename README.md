@@ -6,7 +6,7 @@ A small Todo demonstration app built with Angular 20, standalone components and 
 
 Requirements
 
-- Node.js (recommended: Node 18 LTS or Node 20 LTS).
+- Node.js (^20, recommended v24.11.0).
 - npm (bundled with Node) or your preferred package manager.
 
 Install and run:
@@ -56,7 +56,7 @@ Todos are persisted to `localStorage` under the key `todos`. This provides a sim
 
 Recommended Node.js
 
-- Node 18 LTS (18.16.x or newer) or Node 20 LTS. Angular 20 works well with both Node 18 and Node 20. If you run into native build issues, try Node 18.x.
+- Node (^20, recommended v24.11.0)
 
 ## Notable implementation details
 
